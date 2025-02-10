@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게임 컨트롤러 진동 테스트</title>
+    <script>
+        let vibrationInterval;
+
+        window.addEventListener("gamepadconnected", (event) => {
+            console.log("게임패드 연결됨:", event.gamepad);
+            document.getElementById("status").innerText = "게임패드 연결됨! 버튼을 눌러 진동을 테스트하세요.";
+        });
+        
+        function startVibration() {
+            const gamepad = navigator.getGamepads()[0]; // 첫 번째 게임패드 사용
+            if (gamepad && gamepad.vibrationActuator) {
+                vibrationInterval = setInterval(() => {
+                    gamepad.vibrationActuator.playEffect("dual-rumble", {
+                        startDelay: 0,
+                        duration: 1000, // 1초간 진동
+                        weakMagnitude: 1.0,
+                        strongMagnitude: 1.0
+                    });
+                }, 1000); // 1초 간격으로 진동 반복
+            } else {
+                alert("진동을 지원하는 게임패드가 연결되지 않았습니다.");
+            }
+        }
+
+        function stopVibration() {
+            clearInterval(vibrationInterval);
+        }
+    </script>
+</head>
+<body>
+    <h1>게임 컨트롤러 진동 테스트</h1>
+    <p id="status">게임패드를 연결하세요.</p>
+    <button onclick="startVibration()">진동 시작</button>
+    <button onclick="stopVibration()">진동 정지</button>
+</body>
+</html>
